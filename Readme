@@ -1,0 +1,15 @@
+dynamicSimulation:
+entity：存放xml解析出来的元素们
+ruleEntity.entity：规则库
+ruleEntity.base：一致性验证
+ruleEntity.realTime：实时性验证
+ruleEntity.safety：安全性验证
+util：xml解析
+validate：验证
+
+首先解析三个xml文件生成三个树。
+分别提取元素进行验证 
+
+hanlp配置方法：
+	https://blog.csdn.net/Jiajikang_jjk/article/details/83756760
+	更改hanlp.properties中的首行，指向data包所在的位置

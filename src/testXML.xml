@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="isolette" wcet="15ms">
+	<component id="188111451" name="thermostat" type="rtos" wcet="3ms">
+		<linkpoint datatype="signal" direction="out" id="-868646727" name="operatorFeedback" period="3ms"/>
+		<linkpoint datatype="signal" direction="in" id="498977192" name="currentTemperature" period="3ms"/>
+		<linkpoint datatype="signal" direction="in" id="1899913215" name="operatorsettings" period="3ms"/>
+		<linkpoint datatype="signal" direction="out" id="1962799049" name="heating" period="3ms"/>
+		<propagation id="94" name="Violation" port_id="498977192"/>
+		<propagation id="95" name="InvalidParameter" port_id="498977192"/>
+		<propagation id="96" name="InvalidParameter" port_id="1962799049"/>
+		<errorpath endportid="1962799049" id="1" startportid="498977192"/>
+		<errorpath endportid="1962799049" id="2" startportid="498977192"/>
+		<state id="-1343609814" name="FailStop"/>
+		<state id="-130174644" name="Operational"/>
+		<transition dest="-1343609814" event="Failure" id="-737990666" source="-130174644"/>
+		<transition dest="-130174644" event="Recoverevent" id="906945525" source="-1343609814"/>
+		<partition id="-2025549281">
+			<task deadline="1ms" id="980521062" name="feedback" wcet="1ms">
+				<port direction="out" id="-119440999" name="feedback"/>
+				<port direction="in" id="1113445874" name="setting"/>
+			</task>
+		</partition>
+		<partition id="-1705133881">
+			<task deadline="1ms" id="1207265160" name="datadeal" wcet="2ms">
+				<port direction="out" id="-1157856361" name="dataout"/>
+				<port direction="in" id="1721690136" name="datain"/>
+				<task id="-2017500194" name="verify.impl">
+					<port direction="in" id="-1814976050" name="currT"/>
+					<port direction="out" id="58503423" name="currT2"/>
+				</task>
+				<task id="767217657" name="format.impl">
+					<port direction="out" id="-449289546" name="currT2"/>
+					<port direction="in" id="138061747" name="currT"/>
+				</task>
+				<connection dest="-1814976050" id="11" name="new_connection" source="1721690136"/>
+				<connection dest="138061747" id="12" name="new_connection2" source="58503423"/>
+				<connection dest="-1157856361" id="13" name="new_connection3" source="-449289546"/>
+				<propagation fault="Violation、InvalidParameter、" id="1" name="task的故障" port_id="1721690136"/>
+				<propagation fault="Violation、InvalidParameter、" id="2" name="task的故障" port_id="-1157856361"/>
+			</task>
+		</partition>
+		<partition id="-770937870">
+			<task deadline="1ms" id="469029413" name="temadjust" wcet="1ms">
+				<port direction="in" id="-964489506" name="setting"/>
+				<port direction="in" id="1061272051" name="ct"/>
+				<port direction="out" id="1461535912" name="heating"/>
+			</task>
+		</partition>
+		<task deadline="1ms" id="906762608" name="setTemrange" wcet="1ms">
+			<port direction="out" id="-631139232" name="out4adjust"/>
+			<port direction="out" id="-6797454" name="out4back"/>
+			<port direction="in" id="809226935" name="insetting"/>
+		</task>
+		<connection dest="1113445874" id="14" source="-6797454"/>
+		<connection dest="-964489506" id="15" source="-631139232"/>
+		<connection dest="1721690136" id="16" source="498977192"/>
+		<connection dest="809226935" id="17" source="1899913215"/>
+		<connection dest="-868646727" id="18" source="-119440999"/>
+		<connection dest="1061272051" id="19" source="-1157856361"/>
+		<connection dest="1962799049" id="20" source="1461535912"/>
+	</component>
+	<communicationchannel dest="-26891629" id="-1127206551" name="new_connection" source="1962799049" type="sync"/>
+	<communicationchannel dest="1899913215" id="-198507833" name="new_connection2" source="40452459" type="sync"/>
+	<communicationchannel dest="498977192" id="372059656" name="new_connection3" source="1049391051" type="sync"/>
+	<communicationchannel dest="1143092951" id="397218471" name="new_connection4" source="-868646727" type="sync"/>
+	<communicationchannel dest="-1935909001" id="549392051" name="ct4a" source="1049391051" type="sync"/>
+</system>
